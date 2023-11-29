@@ -23,3 +23,14 @@ export const RegisterSchema = z
     path: ['confirm'],
   });
 
+export const LoginSchema = z.object({
+  email: z.string().email().max(60, 'Email must be less than 60 characters'),
+  password: z
+    .string()
+    .trim()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(
+      /^(?=.*[A-Z])(?=.*\d).*$/,
+      'Password must contain at least one uppercase letter and one number'
+    ),
+});
