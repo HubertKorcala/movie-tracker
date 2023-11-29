@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 // eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
+import { getServerSession } from 'next-auth';
+import SessionProvider from '@/context/SessionProvider';
 
 export const metadata: Metadata = {
   title: 'Movie Tracker',
@@ -19,15 +21,17 @@ const spaceGrotesk = Space_Grotesk({
   variable: '--font-spaceGrotesk',
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+
   return (
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
-        {children}
+        <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>
   );
