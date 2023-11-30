@@ -4,6 +4,7 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '@/context/SessionProvider';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'Movie Tracker',
@@ -32,6 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
         <SessionProvider session={session}>{children}</SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

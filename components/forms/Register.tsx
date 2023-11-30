@@ -2,7 +2,7 @@
 
 import { RegisterSchema } from '@/lib/validations';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,8 +15,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '../ui/input';
+import { useState } from 'react';
+import { isEmailTaken } from '@/lib/actions/users.action';
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -28,13 +34,30 @@ const Register = () => {
   });
 
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+    setIsSubmitting(true);
     const { email, name, password } = values;
+    try {
+      const result = await isEmailTaken(email);
 
-    const response = await fetch('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ email, name, password }),
-    });
-    console.log({ response });
+      if (result) {
+        set(form.formState.errors, 'email', {
+          type: 'manual',
+          message: 'Email is already in use.',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ email, name, password }),
+      });
+    } catch (error) {
+      setIsSubmitting(false);
+    }
+
+    setIsSubmitting(false);
+    router.push('/');
   }
 
   return (
@@ -80,7 +103,8 @@ const Register = () => {
                 />
               </FormControl>
               <FormDescription>
-                Password must be at least 8 characters long.
+                Password must be at least 8 characters long,
+                <br /> contain number and uppercase letter.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -103,7 +127,9 @@ const Register = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Register</Button>
+        <Button disabled={isSubmitting} type="submit">
+          {isSubmitting ? 'Submitting...' : 'Register'}
+        </Button>
       </form>
     </Form>
   );

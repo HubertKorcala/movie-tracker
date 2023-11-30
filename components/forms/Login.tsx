@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -34,8 +33,6 @@ const Login = () => {
       password,
       redirect: false,
     });
-
-    console.log({ response });
   }
 
   return (
