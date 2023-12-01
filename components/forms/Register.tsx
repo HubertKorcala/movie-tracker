@@ -18,6 +18,7 @@ import { Input } from '../ui/input';
 import { useState } from 'react';
 import { isEmailTaken } from '@/lib/actions/users.action';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const Register = () => {
   const router = useRouter();
@@ -48,14 +49,17 @@ const Register = () => {
         return;
       }
 
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+
       const response = await fetch('/api/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ email, name, password }),
+        body: JSON.stringify({ email, name: capitalizedName, password }),
       });
     } catch (error) {
       setIsSubmitting(false);
     }
 
+    toast.success('Account created!');
     setIsSubmitting(false);
     router.push('/');
   }
