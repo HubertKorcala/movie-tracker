@@ -5,7 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
 import { sql } from '@vercel/postgres';
 
-export const authOptions = {
+const authOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? '',
@@ -80,6 +80,6 @@ export const authOptions = {
   },
 };
 
-export const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
