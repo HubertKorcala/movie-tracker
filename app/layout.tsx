@@ -5,6 +5,7 @@ import './globals.css';
 import { getServerSession } from 'next-auth';
 import SessionProvider from '@/context/SessionProvider';
 import { Toaster } from 'sonner';
+import { ThemeProvider } from '@/context/ThemeProvider';
 
 export const metadata: Metadata = {
   title: 'Movie Tracker',
@@ -31,8 +32,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
-        <SessionProvider session={session}>{children}</SessionProvider>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} text-dark200_light900`}
+      >
+        <SessionProvider session={session}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </SessionProvider>
         <Toaster />
       </body>
     </html>

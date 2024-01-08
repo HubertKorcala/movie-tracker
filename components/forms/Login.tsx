@@ -15,8 +15,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '../ui/input';
 import { signIn } from 'next-auth/react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -33,6 +37,12 @@ const Login = () => {
       password,
       redirect: false,
     });
+
+    if (response?.error) {
+      return toast.error('Wrong email or password, please try again.');
+    }
+
+    router.push('/');
   }
 
   return (
