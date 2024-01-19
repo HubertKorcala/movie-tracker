@@ -1,6 +1,8 @@
 import SearchBar from './shared/SearchBar';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const WelcomeSearchView = async () => {
+  noStore();
   const response = await fetch(
     process.env.THEMOVIEDB_API_URL + '/trending/movie/week?language=en-US',
     {
