@@ -9,6 +9,11 @@ body {
 }
 
 @layer utilities {
+  .bg-carousel {
+    background-position: 50% 200px;
+    background-repeat: no-repeat;
+  }
+
   .flex-center {
     @apply flex justify-center items-center;
   }
